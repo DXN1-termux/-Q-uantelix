@@ -1,1 +1,35 @@
+# PROPRIETARY LICENSE AND TERMS OF USE
 
+**COPYRIGHT © 2026 [Q]UANTELIX. ALL RIGHTS RESERVED.**
+
+**IMPORTANT—READ CAREFULLY:** This Proprietary License and Terms of Use ("Agreement") is a legally binding contract between you (either an individual or a single legal entity) and [Q]uantelix ("Licensor") regarding the software, source code, object code, documentation, architectural blueprints, algorithms, designs, trade secrets, and all associated digital assets residing in this repository (collectively referred to as the "Licensed Materials").
+
+BY ACCESSING, VIEWING, OR BROWSING THIS REPOSITORY, YOU EXPRESSLY ACCEPT AND AGREE TO BE BOUND BY THE TERMS AND CONDITIONS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO THESE TERMS, YOU MUST IMMEDIATELY CEASE ALL ACCESS TO THIS REPOSITORY.
+
+### 1. OWNERSHIP AND INTELLECTUAL PROPERTY RIGHTS
+All title, ownership rights, and intellectual property rights in and to the Licensed Materials (including but not limited to any source code, blueprints, images, animations, text, and logic incorporated into the Licensed Materials), and any copies thereof, are owned exclusively by [Q]uantelix. The Licensed Materials are protected by copyright laws, international treaty provisions, and other intellectual property laws and treaties. The Licensed Materials are strictly licensed for viewing, not sold.
+
+### 2. GRANT OF LIMITED, VIEW-ONLY LICENSE
+Subject to your strict and unwavering compliance with the terms of this Agreement, Licensor grants you a personal, non-exclusive, non-transferable, non-assignable, and fully revocable limited permission strictly to view the contents of this repository as hosted on the GitHub platform. This permission is granted exclusively for personal, informational, evaluation, and verification purposes.
+
+### 3. STRICT PROHIBITIONS AND RESTRICTIONS
+The permissions granted in Section 2 are strictly limited in scope. You are expressly prohibited from undertaking any of the following actions, either directly or indirectly:
+* **Reproduction:** Copying, reproducing, duplicating, cloning, or downloading any portion of the Licensed Materials, including the use of `git clone`, `git fork`, or similar commands intended to replicate or mirror the repository.
+* **Modification:** Modifying, altering, translating, adapting, or creating derivative works based upon the Licensed Materials.
+* **Distribution:** Distributing, broadcasting, transmitting, sharing, publishing, or otherwise making the Licensed Materials available to any third party.
+* **Commercial Exploitation:** Selling, leasing, renting, sublicensing, or using the Licensed Materials for any commercial, non-commercial, academic, or organizational purpose.
+* **Reverse Engineering:** Decompiling, reverse engineering, disassembling, or attempting to derive the underlying ideas, algorithms, or structure of the Licensed Materials.
+* **Removal of Notices:** Removing, obscuring, or altering any copyright, trademark, patent, or other proprietary notices, legends, or labels contained within the Licensed Materials.
+
+### 4. NO IMPLIED RIGHTS
+Except for the limited, express view-only permission specifically granted in Section 2, no other rights or licenses, express or implied, are granted to you under any patents, copyrights, trade secrets, trademarks, or other intellectual property rights owned or controlled by [Q]uantelix. 
+
+### 5. DISCLAIMER OF WARRANTIES
+THE LICENSED MATERIALS ARE PROVIDED STRICTLY ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITH ALL FAULTS AND WITHOUT WARRANTY OF ANY KIND. [Q]UANTELIX EXPRESSLY DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. LICENSOR DOES NOT WARRANT THAT THE LICENSED MATERIALS WILL MEET YOUR REQUIREMENTS OR THAT THEIR AVAILABILITY WILL BE UNINTERRUPTED OR ERROR-FREE.
+
+### 6. LIMITATION OF LIABILITY
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL [Q]UANTELIX, ITS AFFILIATES, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER (INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS, LOSS OF DATA, BUSINESS INTERRUPTION, OR ANY OTHER PECUNIARY LOSS) ARISING OUT OF OR IN ANY WAY RELATED TO THE USE OF OR INABILITY TO USE THE LICENSED MATERIALS, EVEN IF [Q]UANTELIX HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+### 7. GOVERNING LAW AND EQUITABLE RELIEF
+You acknowledge and agree that any breach of this Agreement by you would cause irreparable harm to [Q]uantelix, for which monetary damages would be inadequate. Accordingly, in addition to any other remedies available at law, [Q]uantelix shall be entitled to seek injunctive or other equitable relief to prevent any actual or threatened breach of this Agreement.
+EOF
