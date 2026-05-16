@@ -1,5 +1,5 @@
-"# ©️[Q]uantelix-
-Owned by Dxn1/dani postma"
+# ©️[Q]uantelix-
+# Owned by Dxn1/dani postma
 
 
 Copyright (c) 2026 [Q]uantelix. All rights reserved.
