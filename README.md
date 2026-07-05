@@ -1,49 +1,218 @@
 <p align="center">
-  <img src="assets/logo/quantelix-logo.svg" alt="[Q]uantelix" width="520">
+  <img src="assets/banners/quantelix-banner.svg" alt="[Q]uantelix" width="100%">
 </p>
 
 <p align="center">
-  <strong>AGENTIC AI. INTELLIGENCE THAT ACTS.</strong>
+  <a href="LICENSE">
+    <img src="assets/shields/license.svg" alt="license" height="20">
+  </a>
+  <a href="#">
+    <img src="assets/shields/version.svg" alt="version" height="20">
+  </a>
+  <a href="#">
+    <img src="assets/shields/platform.svg" alt="platform" height="20">
+  </a>
+  <a href="#">
+    <img src="assets/shields/context.svg" alt="context" height="20">
+  </a>
+  <a href="https://github.com/DXN1-termux">
+    <img src="assets/shields/built-by.svg" alt="built by DXN1-termux" height="20">
+  </a>
 </p>
 
 <p align="center">
-  <a href="#features">Features</a> •
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#architecture">Architecture</a> •
-  <a href="#context-engine">Context Engine</a> •
-  <a href="#memory-system">Memory System</a> •
+  <a href="#core-engine">Core Engine</a> •
+  <a href="#context-engine">100M Context</a> •
+  <a href="#memory-system">Memory</a> •
+  <a href="#moe-system">MoE Agents</a> •
   <a href="#tools">Tools</a> •
-  <a href="#termux--flask">Termux</a> •
-  <a href="#brand">Brand</a>
+  <a href="#workflows">Workflows</a> •
+  <a href="#marketplace">Marketplace</a> •
+  <a href="#enterprise">Enterprise</a> •
+  <a href="#quick-start">Quick Start</a>
 </p>
 
 ---
 
-[Q]uantelix is a fully autonomous agentic AI platform built from scratch — custom agent orchestration engine, intelligent context management with a **100M token virtual window**, a biological-inspired memory system with decay and merging, a plugin-based tool ecosystem with **20+ built-in tools**, a premium web UI inspired by Cursor + Codex, and a Flask backend for Termux/Android.
+[Q]uantelix is a fully autonomous agentic AI platform built from the ground up by **[DXN1-termux](https://github.com/DXN1-termux/)**. It features a custom agent orchestration engine with hierarchical Mixture-of-Experts, a **100M token virtual context window** with intelligent retrieval, a biological-inspired memory system with decay and merging, a visual workflow builder, a plugin marketplace, and enterprise-grade security — all wrapped in a premium web interface.
 
-## Features
+---
 
-### Core Engine
-- **Custom Agent Orchestrator** — Built from scratch. No LangChain, no CrewAI, no wrappers. Plan → execute → evaluate → respond loop with ReAct-style reasoning
-- **100M Virtual Context** — Store everything, smartly retrieve what matters. Multi-tier compression (hot → warm → cool → cold) with SQLite persistence
-- **Intelligent Sort Engine** — 6-dimension scoring (relevance, recency, importance, frequency, type weight, emotion) with configurable weights
-- **Biological Memory System** — Episodic, semantic, procedural, and working memory types with lifecycle management, automatic decay, strengthening on recall, merging of similar memories, and a memory graph
+## Core Engine
 
-### Interface
-- **Premium Web UI** — Dark-themed glassmorphism design with streaming responses, tool call visualization, thinking indicators, and a collapsible sidebar
-- **Monaco Editor** — Full code editing with syntax highlighting and diff views
-- **Integrated Terminal** — xterm.js-powered terminal emulator
-- **Context Indicator** — Real-time visualization of virtual context usage, tier breakdown, and model window utilization
+| Component | Description | Lines |
+|-----------|-------------|-------|
+| `Orchestrator` | Main agent loop: plan, execute, evaluate, respond | 120 |
+| `ContextManager` | 100M virtual context with multi-tier compression | 130 |
+| `Planner` | ReAct-style planning with structured tool calls | 60 |
+| `Executor` | Sandboxed tool execution with timeouts | 80 |
+| `EventBus` | Real-time pub/sub for UI state visualization | 50 |
+| `MemorySystem` | Biological-inspired memory with graph | 200+ |
 
-### Tool Ecosystem
-- **20+ Built-in Tools** — Code, terminal, git, web, memory, utility, Docker, deploy, database, API
-- **Plugin System** — Self-contained tool plugins with JSON Schema, permission declarations, and async execution
-- **MCP Bridge** — Connect to external Model Context Protocol servers as tool sources
+## Context Engine
 
-### Platform
-- **BYOK + Free Tier** — Bring your own API key (OpenAI, Anthropic) or use built-in free models (GPT-4o-mini, Claude Haiku)
-- **Termux Compatible** — Flask backend runs natively on Android/Termux with auto-port detection
-- **Full Brand System** — Custom SVG logos, icons, favicon, OG images, and loading states
+The context engine bridges a **100M token virtual window** with actual LLM context windows (128K–1M depending on model). Every message, tool output, and document is stored in a persistent SQLite store and smartly retrieved via a **6-dimension sort engine**.
+
+### Sort Dimensions
+
+| Dimension | Weight | What it measures |
+|-----------|--------|-----------------|
+| Relevance | 0.30 | Query similarity (keyword overlap) |
+| Recency | 0.20 | Exponential decay with configurable half-life |
+| Importance | 0.25 | Content significance (decisions, errors, code) |
+| Frequency | 0.10 | How often recalled or referenced |
+| Type Weight | 0.10 | Code snippets, instructions, casual |
+| Emotional Signal | 0.05 | Urgency markers, errors, breakthroughs |
+
+### Tier Allocation
+
+```
+┌──────────────────────────────────────────────┐
+│  SQLite Store (100M tokens)                    │
+│  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ │
+│  │  Hot   │ │  Warm  │ │  Cool  │ │  Cold  │ │
+│  │ raw    │ │ comp-  │ │ summa- │ │ arch-  │ │
+│  │ msgs   │ │ ressed │ │ rized  │ │ ived   │ │
+│  └────────┘ └────────┘ └────────┘ └────────┘ │
+└──────────────────┬───────────────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────────────┐
+│  Sort Engine (filter → score → rank → select) │
+└──────────────────┬───────────────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────────────┐
+│  LLM Context Window (128K–1M)                 │
+│  System 5% | Retrieved 40% | Recent 25%       │
+│  | Working 20% | Reserve 10%                  │
+└──────────────────────────────────────────────┘
+```
+
+## Memory System
+
+Biological-inspired memory with four types and automatic lifecycle management.
+
+### Memory Types
+
+| Type | What it stores | Decay | Example |
+|------|---------------|-------|---------|
+| **Episodic** | Events, conversations | 0.95/day | User asked about Docker at 3pm |
+| **Semantic** | Facts, knowledge | 0.99/week | User prefers TypeScript |
+| **Procedural** | How-to, workflows | 0.999/month | Deploy command: vercel --prod |
+| **Working** | Current task context | 0.8/hour | Editing file X to fix bug Y |
+
+### Lifecycle
+
+```
+Create → Encode → Store → Recall (strengthen) → Decay → Archive
+                              ↓
+                         Merge (similar memories combine)
+                              ↓
+                         Graph (temporal + causal links)
+```
+
+## MoE System
+
+Hierarchical Mixture-of-Experts with **8 specialized agents** coordinated by a central router.
+
+```
+User Request
+    │
+    ▼
+┌──────────────────────────────────────┐
+│         MoE Router                    │
+│  Task analysis → keyword detection    │
+│  → route to primary + supporting      │
+└──────┬──────────┬──────────┬─────────┘
+       │          │          │
+       ▼          ▼          ▼
+┌─────────┐ ┌─────────┐ ┌─────────┐
+│ Planner  │ │  Coder  │ │Researcher│  ← Expert Agents
+│ Agent    │ │  Agent  │ │ Agent    │
+├─────────┤ ├─────────┤ ├─────────┤
+│ Decom-  │ │ Write   │ │ Search   │
+│ pose    │ │ Debug   │ │ Research │
+│ Route   │ │ Refactor│ │ Analyze  │
+└─────────┘ └─────────┘ └─────────┘
+```
+
+### Expert Agents
+
+| Expert | Model | Tools | Max Sub-Agents |
+|--------|-------|-------|---------------|
+| **Planner** | GPT-4o | Planning, routing, context | 5 |
+| **Coder** | GPT-4o | File ops, git, commands | 20 |
+| **Researcher** | GPT-4o-mini | Web search, fetch, read | 10 |
+| **DevOps** | GPT-4o-mini | Docker, deploy, network | 15 |
+| **Data** | GPT-4o-mini | SQLite, JSON, CSV | 10 |
+| **Tester** | GPT-4o-mini | Test, lint, benchmark | 10 |
+| **Writer** | GPT-4o-mini | Docs, README, changelogs | 5 |
+| **Reviewer** | GPT-4o | Code review, audit | 5 |
+
+Each expert can spawn **sub-agents** — lightweight agents per sub-task that execute independently and report back. Sub-agents share context via a **Memory Bus** (pub/sub communication channel).
+
+---
+
+## Tools
+
+### Built-in (20+ Tools)
+
+<p>
+  <code>read_file</code> <code>write_file</code> <code>edit_file</code> <code>search_code</code> <code>list_directory</code><br>
+  <code>execute_command</code> <code>execute_script</code><br>
+  <code>git_status</code> <code>git_diff</code> <code>git_log</code> <code>git_commit</code> <code>git_branch</code> <code>git_checkout</code> <code>git_push</code><br>
+  <code>web_search</code> <code>read_url</code><br>
+  <code>remember</code> <code>recall</code> <code>forget</code><br>
+  <code>check_port</code> <code>find_open_port</code><br>
+  <code>docker_ps</code> <code>docker_exec</code> <code>docker_compose_up</code> <code>docker_build</code><br>
+  <code>deploy_vercel</code> <code>deploy_netlify</code><br>
+  <code>query_sqlite</code> <code>list_tables</code> <code>create_table</code><br>
+  <code>http_request</code> <code>graphql_query</code> <code>test_endpoint</code>
+</p>
+
+### Plugin Marketplace
+
+| Feature | Description |
+|---------|-------------|
+| **Registry** | Central catalog of community plugins |
+| **Sandbox** | Isolated runtime with declared permissions |
+| **Verifier** | Plugin security scanning before install |
+| **MCP Bridge** | Connect to external MCP servers |
+
+Featured plugins: Supabase Client, Stripe API, AWS S3, Slack Messenger, Kubernetes CLI, GitHub Actions, Sentry Debugger, Figma Export, and more.
+
+---
+
+## Workflows
+
+Visual drag-and-drop workflow builder with **9 node types**:
+
+| Node | Function |
+|------|----------|
+| Start / End | Workflow entry and exit |
+| Action | Execute a tool |
+| Sub-Agent | Spawn an expert agent |
+| Condition | If/else branching |
+| Loop | Iterate over data |
+| Human Input | Pause for user approval |
+| Parallel | Run steps concurrently |
+| Merge | Combine parallel results |
+
+Workflows can be **scheduled** (hourly/daily/weekly via cron) or **triggered** by events (git push, webhook, timer).
+
+---
+
+## Enterprise
+
+| Feature | Description |
+|---------|-------------|
+| **SSO / SAML** | Okta, Azure AD, Google Workspace |
+| **RBAC** | Admin, Developer, Viewer roles |
+| **Audit Log** | Full action trail with severity filtering and export |
+| **Policy Engine** | Allow/block/rate-limit/approval rules per tool |
+| **Data Residency** | US, EU, or APAC region selection |
+| **Admin Panel** | User management, billing, usage analytics |
 
 ---
 
@@ -56,37 +225,25 @@
 git clone https://github.com/DXN1-termux/-Q-uantelix.git
 cd -Q-uantelix
 
-# Install & run
+# Install and run
 cd web && npm install && npm run dev
 ```
 
 Opens at `http://localhost:3000`
 
-### Flask Backend (Termux / Python)
+### Flask Backend (Python / Termux)
 
 ```bash
-# Install Python dependencies
 pip install flask flask-cors
-
-# Run
 python server/app.py
-# or
-./scripts/start.sh
 ```
 
-The server auto-finds an available port (3000–8099) and prints the URL.
+Auto-finds an available port (3000–8099).
 
 ### Port Checker
 
 ```bash
-# Check a specific port
-python scripts/port-check.py 3000
-
-# Find first available port
 python scripts/port-check.py --find
-
-# Full scan (JSON output)
-python scripts/port-check.py --json 3000 8099
 ```
 
 ---
@@ -95,209 +252,35 @@ python scripts/port-check.py --json 3000 8099
 
 ```
 -Q-uantelix/
-├── web/                    # Next.js web application
-│   ├── src/app/            # App router pages
-│   ├── src/components/     # UI components
-│   │   ├── brand/          # Logo components
-│   │   ├── chat/           # Chat panel, messages, input, context indicator
-│   │   ├── sidebar/        # Collapsible sidebar with history
-│   │   └── ui/             # shadcn/ui primitives (20+ components)
-│   ├── src/hooks/          # use-agent hook
-│   └── src/lib/            # Zustand store, utils
-├── agent/                  # Custom agent runtime (TypeScript)
-│   ├── core/               # Engine core
-│   │   ├── orchestrator.ts # Main agent loop
-│   │   ├── planner.ts      # ReAct-style planning
-│   │   ├── executor.ts     # Sandboxed tool execution
-│   │   ├── context-manager.ts  # 100M virtual context
-│   │   ├── context-store.ts    # SQLite persistence
-│   │   ├── sort-engine.ts      # Intelligent ranking pipeline
-│   │   ├── score-calculator.ts # 6-dimension scoring
-│   │   ├── memory-system.ts    # Biological memory with graph
-│   │   ├── token-counter.ts    # Per-model token counting
-│   │   ├── deduplicator.ts     # Near-duplicate detection
-│   │   ├── importance-classifier.ts  # Content importance
-│   │   ├── event-bus.ts        # Real-time state events
-│   │   └── types.ts            # All TypeScript types
-│   ├── tools/              # Tool implementations
-│   │   ├── code/           # File read/write/edit/search
-│   │   ├── terminal/       # Command/script execution
-│   │   ├── git/            # Git operations
-│   │   ├── web/            # Search, fetch, browse
-│   │   ├── memory/         # Remember, recall, forget
-│   │   ├── util/           # UUID, JSON, base64, port checker
-│   │   ├── docker/         # Container management
-│   │   ├── deploy/         # Vercel, Netlify
-│   │   ├── db/             # SQLite operations
-│   │   └── api/            # HTTP, GraphQL, endpoint testing
-│   ├── plugins/            # Tool registry, MCP bridge
-│   └── providers/          # LLM providers (OpenAI, Anthropic)
-├── server/                 # Flask backend
-│   ├── app.py              # Flask app with API routes
-│   └── requirements.txt    # Python dependencies
-├── assets/logo/            # Brand SVGs (4 variants)
-├── scripts/                # Dev scripts, port checker, start.sh
-└── docs/                   # Documentation
+├── agent/             # Custom agent runtime (TypeScript)
+│   ├── core/          # Orchestrator, context, memory, sort engine
+│   ├── moe/           # MoE router, experts, sub-agents, coordinator
+│   ├── workflow/      # Workflow interpreter + scheduler
+│   ├── knowledge/     # RAG system, chunking, retrieval
+│   ├── tools/         # 20+ built-in tool implementations
+│   ├── plugins/       # Plugin registry, marketplace, MCP bridge
+│   ├── providers/     # OpenAI, Anthropic LLM providers
+│   ├── sandbox/       # Docker container management
+│   └── enterprise/    # Audit logger, policy engine
+├── web/               # Next.js web app (React, Tailwind, shadcn)
+│   ├── src/components/#
+│   │   ├── brand/     # Custom SVG illustrations, logos
+│   │   ├── chat/      # Chat panel, messages, context indicator
+│   │   ├── workflow/  # Workflow canvas, palette, nodes
+│   │   ├── marketplace/# Plugin browse, install, manage
+│   │   ├── knowledge/ # Knowledge source management
+│   │   ├── collab/    # Live cursors, presence
+│   │   └── admin/     # Enterprise admin panel
+│   └── src/lib/       # Zustand store, hooks
+├── server/            # Flask + WebSocket backends
+├── assets/            # Brand SVGs, shields, illustrations
+│   ├── banners/       # README banner graphics
+│   ├── shields/       # Badge SVGs (license, version, etc.)
+│   └── ui/            # Empty, loading, error states
+├── infrastructure/    # Docker, K8s, Terraform
+├── scripts/           # Port checker, dev server, start script
+└── docs/              # Architecture, tools API, contributing
 ```
-
----
-
-## Context Engine
-
-The context engine bridges a **100M token virtual window** with the actual LLM context window (128k–1M depending on model).
-
-### How it works
-
-1. **Everything is stored** — every message, tool output, and document goes into SQLite with tiered chunks (hot/warm/cool/cold)
-2. **Sort engine scores** — when you send a message, every piece of stored context is scored on 6 dimensions:
-   - **Relevance** (0.30) — How related to the current query
-   - **Recency** (0.20) — Exponential decay based on age
-   - **Importance** (0.25) — How significant when created (decisions > filler)
-   - **Frequency** (0.10) — How often recalled/referenced
-   - **Type Weight** (0.10) — Code > system > assistant > casual
-   - **Emotional Signal** (0.05) — Errors, decisions, breakthroughs
-3. **Best pieces selected** — Top-ranked context that fits in the model's token budget
-4. **Assembled into prompt** — System prompt (5%) → Retrieved context (40%) → Recent messages (25%) → Working memory (20%) → Reserve (10%)
-
-### Token Budget Allocation
-
-| Slot | % of Window | What goes here |
-|------|-------------|----------------|
-| System prompt | 5% | Agent instructions |
-| Retrieved context | 40% | Best-scored memories + chunks |
-| Recent messages | 25% | Last N raw messages |
-| Working memory | 20% | Current tool results, diffs |
-| Reserve | 10% | Buffer for response |
-
----
-
-## Memory System
-
-Biological-inspired memory with four types, automatic lifecycle management, and a graph structure.
-
-### Memory Types
-
-| Type | What it stores | Decay rate | Example |
-|------|---------------|------------|---------|
-| **Episodic** | Events, conversations | 0.95/day | "User asked about Docker at 3pm" |
-| **Semantic** | Facts, knowledge | 0.99/week | "User prefers TypeScript" |
-| **Procedural** | How-to, workflows | 0.999/month | "Deploy command: vercel --prod" |
-| **Working** | Current task context | 0.8/hour | "Editing file X to fix bug Y" |
-
-### Memory Lifecycle
-
-- **Strengthening** — Every recall boosts strength by +0.1 (capped at 1.0)
-- **Decay** — Unused memories fade at type-specific rates
-- **Merging** — Similar memories (>80% similarity within 24h) auto-merge with parent/child links
-- **Archiving** — Memories below 0.1 strength are archived (not deleted)
-
-### Memory Graph
-
-Memories form a graph with typed edges:
-- **related** — Semantic connections between memories
-- **caused** — "I did X because of Y" links
-- **temporal** — Consecutive messages auto-linked
-- **merged** — Parent/child relationships from merging
-
----
-
-## Tools
-
-### Built-in Tools (20+)
-
-| Category | Tools |
-|----------|-------|
-| **Code** | `read_file`, `write_file`, `edit_file`, `search_code`, `list_directory` |
-| **Terminal** | `execute_command`, `execute_script` |
-| **Git** | `git_status`, `git_diff`, `git_log`, `git_commit`, `git_branch`, `git_checkout`, `git_push` |
-| **Web** | `web_search`, `read_url` |
-| **Memory** | `remember`, `recall`, `forget` |
-| **Utility** | `now`, `uuid`, `read_json`, `write_json`, `base64_encode`, `base64_decode`, `check_port`, `find_open_port` |
-| **Docker** | `docker_ps`, `docker_exec`, `docker_compose_up`, `docker_build` |
-| **Deploy** | `deploy_vercel`, `deploy_netlify` |
-| **Database** | `query_sqlite`, `list_tables`, `create_table` |
-| **API** | `http_request`, `graphql_query`, `test_endpoint` |
-
-### Plugin System
-
-Each tool is a self-contained plugin:
-
-```typescript
-interface ToolDefinition {
-  name: string;
-  description: string;
-  category: string;
-  tags: string[];
-  input_schema: JSONSchema;
-  permissions: { filesystem?: string[]; network?: boolean; env?: string[] };
-  execute: (args: Record<string, any>, ctx: ToolContext) => Promise<ToolOutput>;
-}
-```
-
-Register tools via the `ToolRegistry`:
-```typescript
-registry.register(myCustomTool);
-registry.registerMany([tool1, tool2, tool3]);
-```
-
-### MCP Bridge
-
-Connect external Model Context Protocol servers:
-```typescript
-const bridge = new MCPBridge(registry);
-bridge.addServer({ name: "my-server", url: "http://localhost:8080" });
-await bridge.syncAll(); // Pulls all tools from MCP servers
-```
-
----
-
-## Termux / Flask
-
-The Flask backend provides a lightweight alternative to the Next.js app, optimized for Termux/Android.
-
-### Endpoints
-
-| Route | Method | Description |
-|-------|--------|-------------|
-| `/api/health` | GET | Health check + server info |
-| `/api/port/check?port=3000` | GET | Check if a port is available |
-| `/api/port/find?start=3000&end=8099` | GET | Find first available port |
-| `/api/chat` | POST | Send message (SSE streaming response) |
-| `/api/memory/stats` | GET | Memory system statistics |
-| `/api/memory/search?q=...` | GET | Search through stored memories |
-
-### Termux Setup
-
-```bash
-# Install Termux packages
-pkg install python nodejs git
-
-# Install Flask
-pip install flask flask-cors
-
-# Run
-./scripts/start.sh
-```
-
-`start.sh` auto-detects Termux, finds an open port, and starts the appropriate backend.
-
----
-
-## Brand
-
-- **Name**: [Q]uantelix
-- **Tagline**: AGENTIC AI. INTELLIGENCE THAT ACTS.
-- **Colors**: Dark `#0d1117`, Cyan `#38bdf8` / `#22d3ee`, Purple `#a855f7` / `#c084fc`
-- **Logo**: Custom SVG with cyan/purple gradient bracket icon + magnifying circle
-
-### Logo Variants
-
-| Variant | File | Use |
-|---------|------|-----|
-| Full lockup | `assets/logo/quantelix-logo.svg` | Headers, banners |
-| Icon mark | `assets/logo/icon-mark.svg` | App icon, favicon |
-| Horizontal | `assets/logo/quantelix-horizontal.svg` | Navbar, compact spaces |
-| Monochrome | `assets/logo/quantelix-monochrome.svg` | Light backgrounds |
 
 ---
 
@@ -306,25 +289,46 @@ pip install flask flask-cors
 | Layer | Technology |
 |-------|-----------|
 | Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS v4 |
-| UI Components | shadcn/ui (20+ components) |
+| UI Components | shadcn/ui (22 components) |
 | Code Editor | Monaco Editor |
 | Terminal | xterm.js |
 | State Management | Zustand |
-| Agent Engine | Custom TypeScript (no frameworks) |
+| Agent Engine | Custom TypeScript (zero frameworks) |
 | Database | SQLite (via child_process) |
 | LLM Providers | OpenAI API, Anthropic API |
-| Backend (optional) | Python Flask with CORS |
+| Backend | Python Flask with CORS |
+| Real-time | WebSocket (Node.js) |
+| Containerization | Docker, Docker Compose |
+| Orchestration | Kubernetes (Helm chart) |
+| Infra as Code | Terraform (AWS) |
+| Payments | Stripe |
+
+---
+
+## Brand
+
+| Element | Detail |
+|---------|--------|
+| **Name** | `[Q]uantelix` — Q in brackets is the logo icon |
+| **Tagline** | `AGENTIC AI. INTELLIGENCE THAT ACTS.` |
+| **Colors** | Dark `#0d1117`, Cyan `#38bdf8` / `#22d3ee`, Purple `#a855f7` / `#c084fc` |
+| **Logo** | Custom SVG with cyan/purple gradient bracket icon and magnifying circle |
+| **Design** | Dark-first, glassmorphism panels, gradient accents, minimal chrome |
+
+<p align="center">
+  <img src="assets/logo/icon-mark.svg" alt="[Q]uantelix" width="48">
+</p>
 
 ---
 
 ## License
 
-Proprietary — see [License](./License).
+Proprietary — see [LICENSE](./License).
 
 ---
 
 <p align="center">
-  <img src="assets/logo/icon-mark.svg" alt="[Q]uantelix" width="48">
+  <img src="assets/logo/quantelix-horizontal.svg" alt="[Q]uantelix" width="260">
   <br>
-  <em>Built with by DXN1</em>
+  <sub>Built by <a href="https://github.com/DXN1-termux">DXN1-termux</a></sub>
 </p>

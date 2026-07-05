@@ -2,17 +2,10 @@
 
 import { ChatMessage } from "@/lib/agent-store";
 import { cn } from "@/lib/utils";
-import { Bot, User, Code, Terminal, Globe } from "lucide-react";
+import { Bot, User } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-function ToolIcon({ name }: { name?: string }) {
-  if (!name) return <Code size={12} />;
-  if (name.includes("code") || name.includes("file")) return <Code size={12} />;
-  if (name.includes("terminal") || name.includes("command")) return <Terminal size={12} />;
-  if (name.includes("web") || name.includes("search")) return <Globe size={12} />;
-  return <Code size={12} />;
-}
+import { ToolIcon } from "@/components/brand/custom-illustrations";
 
 export function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === "user";
@@ -30,9 +23,9 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
               <span className="ml-1">{message.name || "tool"}</span>
             </Badge>
             {toolData.success ? (
-              <span className="text-[10px] text-green-500">✓ done</span>
+              <span className="text-[10px] text-green-500">done</span>
             ) : (
-              <span className="text-[10px] text-red-500">✗ failed</span>
+              <span className="text-[10px] text-red-500">failed</span>
             )}
           </div>
           <pre className="text-xs text-[#8b949e] whitespace-pre-wrap break-words max-h-32 overflow-y-auto">

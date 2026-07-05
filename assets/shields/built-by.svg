@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="20">
+  <rect width="160" height="20" rx="3" fill="#161b22"/>
+  <rect width="55" height="20" rx="3" fill="#21262d"/>
+  <rect x="55" width="105" height="20" rx="3" fill="#a855f7"/>
+  <g fill="#8b949e" text-anchor="middle" font-family="monospace" font-size="11">
+    <text x="28" y="14">built by</text>
+    <text x="107" y="14" fill="#fff" font-weight="bold">DXN1-termux</text>
+  </g>
+</svg>
