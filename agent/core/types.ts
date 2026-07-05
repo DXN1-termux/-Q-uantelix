@@ -51,6 +51,7 @@ export interface AgentConfig {
   system_prompt: string;
   sandbox_enabled: boolean;
   free_tier: boolean;
+  virtual_context_limit: number;   // 100M tokens
 }
 
 export interface ToolDefinition {

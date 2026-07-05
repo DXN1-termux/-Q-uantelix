@@ -1,6 +1,6 @@
 // ============================================================
 // [Q]uantelix Agent — Utility Tools
-// Common utility operations
+// Common utility operations + port checking
 // ============================================================
 
 import { ToolDefinition, ToolContext, ToolOutput } from "../../core/types";
@@ -109,5 +109,73 @@ export const base64DecodeTool: ToolDefinition = {
   permissions: {},
   async execute(args: Record<string, any>): Promise<ToolOutput> {
     return { success: true, data: Buffer.from(args.encoded, "base64").toString("utf-8") };
+  },
+};
+
+// ─── Port Checker Tools ───
+
+export const checkPortTool: ToolDefinition = {
+  name: "check_port",
+  description: "Check if a specific port is available or in use",
+  category: "utility",
+  tags: ["port", "network", "check"],
+  input_schema: {
+    type: "object",
+    properties: {
+      port: { type: "number", description: "Port number to check" },
+      host: { type: "string", description: "Host to check (default: 0.0.0.0)" },
+    },
+    required: ["port"],
+  },
+  permissions: { network: true },
+  async execute(args: Record<string, any>): Promise<ToolOutput> {
+    const net = await import("net");
+    return new Promise((resolve) => {
+      const server = net.createServer();
+      server.unref();
+      server.on("error", () => {
+        resolve({ success: true, data: { port: args.port, available: false, status: "IN_USE" } });
+      });
+      server.listen(args.port, args.host || "0.0.0.0", () => {
+        server.close(() => {
+          resolve({ success: true, data: { port: args.port, available: true, status: "AVAILABLE" } });
+        });
+      });
+    });
+  },
+};
+
+export const findOpenPortTool: ToolDefinition = {
+  name: "find_open_port",
+  description: "Find the first available port in a range",
+  category: "utility",
+  tags: ["port", "network", "find"],
+  input_schema: {
+    type: "object",
+    properties: {
+      start: { type: "number", description: "Start port (default: 3000)" },
+      end: { type: "number", description: "End port (default: 8099)" },
+    },
+  },
+  permissions: { network: true },
+  async execute(args: Record<string, any>): Promise<ToolOutput> {
+    const start = args.start || 3000;
+    const end = args.end || 8099;
+    const net = await import("net");
+
+    for (let port = start; port <= end; port++) {
+      const available = await new Promise<boolean>((resolve) => {
+        const server = net.createServer();
+        server.unref();
+        server.on("error", () => resolve(false));
+        server.listen(port, "0.0.0.0", () => {
+          server.close(() => resolve(true));
+        });
+      });
+      if (available) {
+        return { success: true, data: { port, range: `${start}-${end}`, status: "AVAILABLE" } };
+      }
+    }
+    return { success: true, data: { port: -1, range: `${start}-${end}`, status: "NO_PORT_AVAILABLE" } };
   },
 };

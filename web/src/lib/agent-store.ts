@@ -23,6 +23,21 @@ export interface Conversation {
   updated_at: number;
 }
 
+export interface ContextUsage {
+  virtualTokens: number;
+  modelMax: number;
+  utilization: number;
+  tierBreakdown: Record<string, number>;
+}
+
+export interface MemoryStats {
+  total: number;
+  byType: Record<string, number>;
+  avgStrength: number;
+  archived: number;
+  merged: number;
+}
+
 interface AgentStore {
   state: AgentState;
   conversations: Conversation[];
@@ -30,6 +45,8 @@ interface AgentStore {
   streamingContent: string;
   error: string | null;
   theme: "dark" | "light";
+  contextUsage: ContextUsage | null;
+  memoryStats: MemoryStats | null;
 
   setState: (state: AgentState) => void;
   setStreamingContent: (content: string) => void;
@@ -40,6 +57,8 @@ interface AgentStore {
   createConversation: () => string;
   setActiveConversation: (id: string) => void;
   setTheme: (theme: "dark" | "light") => void;
+  setContextUsage: (usage: ContextUsage) => void;
+  setMemoryStats: (stats: MemoryStats) => void;
 }
 
 export const useAgentStore = create<AgentStore>((set, get) => ({
@@ -49,14 +68,13 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   streamingContent: "",
   error: null,
   theme: "dark",
+  contextUsage: null,
+  memoryStats: null,
 
   setState: (state) => set({ state }),
-
   setStreamingContent: (content) => set({ streamingContent: content }),
-
   appendStreamingContent: (token) =>
     set((s) => ({ streamingContent: s.streamingContent + token })),
-
   clearStreamingContent: () => set({ streamingContent: "" }),
 
   addMessage: (message) => {
@@ -90,6 +108,7 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   },
 
   setActiveConversation: (id) => set({ activeConversationId: id }),
-
   setTheme: (theme) => set({ theme }),
+  setContextUsage: (usage) => set({ contextUsage: usage }),
+  setMemoryStats: (stats) => set({ memoryStats: stats }),
 }));

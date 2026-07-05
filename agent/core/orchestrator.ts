@@ -1,6 +1,6 @@
 // ============================================================
 // [Q]uantelix Agent Engine — Orchestrator
-// Main agent loop: plan → execute → evaluate → respond
+// Main agent loop with 100M virtual context
 // ============================================================
 
 import {
@@ -11,7 +11,7 @@ import {
 } from "./types";
 import { EventBus } from "./event-bus";
 import { ContextManager } from "./context-manager";
-import { MemorySystem } from "./memory";
+import { ContextStore } from "./context-store";
 import { Planner, PlanResult } from "./planner";
 import { Executor } from "./executor";
 import { ToolRegistry } from "../plugins/registry";
@@ -20,7 +20,7 @@ import { LLMProvider } from "./types";
 export class Orchestrator {
   public events: EventBus;
   public context: ContextManager;
-  public memory: MemorySystem;
+  public store: ContextStore;
   public registry: ToolRegistry;
 
   private planner: Planner;
@@ -39,17 +39,22 @@ export class Orchestrator {
       system_prompt: `You are [Q]uantelix — an autonomous AI agent. You can use tools to accomplish tasks. Think step by step.`,
       sandbox_enabled: true,
       free_tier: false,
+      virtual_context_limit: 100_000_000, // 100M
       ...config,
     };
 
     this.events = new EventBus();
-    this.context = new ContextManager(this.config.max_tokens);
-    this.memory = new MemorySystem();
+    this.store = new ContextStore();
+    this.store.init();
+    this.context = new ContextManager(this.store, this.config.model);
     this.registry = new ToolRegistry();
     this.planner = new Planner([], this.config);
     this.executor = new Executor(this.registry, {
       workspace_dir: "/tmp/quantelix-workspace",
     });
+
+    // Run decay on startup
+    this.context.getMemorySystem().runDecay();
   }
 
   setProvider(provider: LLMProvider): void {
@@ -83,9 +88,14 @@ export class Orchestrator {
       while (stepCount < this.config.max_steps && this.running) {
         this.events.setState("planning");
 
-        // Get current context and plan
-        const messages = this.context.getMessages();
-        const plan = await this.planner.plan(messages);
+        // Get context (assembled with sort engine)
+        const assembled = await this.context.assemble(input);
+
+        this.events.emit("plan_step", {
+          description: `Context budget: ${assembled.budget.usedTokens}/${assembled.budget.modelMaxTokens} tokens used, ${assembled.budget.virtualTokens} virtual`,
+        });
+
+        const plan = await this.planner.plan(assembled.messages);
 
         if (plan.is_final) {
           finalResponse = plan.response || "Task complete.";
@@ -100,7 +110,6 @@ export class Orchestrator {
           break;
         }
 
-        // Execute each step
         for (const step of plan.steps) {
           if (!this.running) break;
           if (!step.tool) {
@@ -115,17 +124,10 @@ export class Orchestrator {
             description: step.description,
           });
 
-          const result = await this.executor.execute(
-            step.tool,
-            step.args || {}
-          );
+          const result = await this.executor.execute(step.tool, step.args || {});
 
-          this.events.emit("tool_result", {
-            name: step.tool,
-            result,
-          });
+          this.events.emit("tool_result", { name: step.tool, result });
 
-          // Feed result back to context
           this.context.add({
             id: crypto.randomUUID(),
             role: "tool",
@@ -160,5 +162,17 @@ export class Orchestrator {
 
   isRunning(): boolean {
     return this.running;
+  }
+
+  getContextUsage() {
+    return this.context.getUsage();
+  }
+
+  getMemoryStats() {
+    return this.context.getMemorySystem().getStats();
+  }
+
+  searchContext(query: string) {
+    return this.context.getMemorySystem().recall(query, 50);
   }
 }
