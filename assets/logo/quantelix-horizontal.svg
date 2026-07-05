@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="100%">
+  <defs>
+    <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(10, 15)" stroke-width="3.5" fill="none">
+    <path d="M12,0 L4,0 C1.5,0 0,1.5 0,4 L0,52 C0,54.5 1.5,56 4,56 L12,56" stroke="#22d3ee" />
+    <path d="M52,0 L60,0 C62.5,0 64,1.5 64,4 L64,52 C64,54.5 62.5,56 60,56 L52,56" stroke="#c084fc" transform="translate(64,28) scale(-1,1) translate(-64,-28)" />
+    <circle cx="32" cy="28" r="16" stroke="url(#hg)" stroke-width="5" />
+    <path d="M42,38 L52,48" stroke="url(#hg)" stroke-width="5" stroke-linecap="round" />
+  </g>
+  <g transform="translate(90, 52)" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Arial" fill="#e6edf3">
+    <text x="0" y="0" font-size="32" font-weight="bold" letter-spacing="-0.5">uantelix</text>
+  </g>
+</svg>
