@@ -1,0 +1,17 @@
+{
+  "name": "@quantelix/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ws-server": "npx tsx ws-server.ts",
+    "flask": "python3 app.py"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  }
+}

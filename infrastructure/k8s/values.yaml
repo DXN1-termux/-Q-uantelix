@@ -1,0 +1,37 @@
+replicaCount: 2
+
+image:
+  repository: quantelix/platform
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  host: quantelix.dev
+
+resources:
+  limits:
+    memory: "2Gi"
+    cpu: "2"
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+
+env:
+  OPENAI_API_KEY: ""
+  ANTHROPIC_API_KEY: ""
+  STRIPE_SECRET_KEY: ""
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80

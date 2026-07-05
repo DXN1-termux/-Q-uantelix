@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  quantelix:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - quantelix_data:/root/.quantelix
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+          cpus: "2"
+
+  collab-server:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+    command: npx tsx server/ws-server.ts
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+
+volumes:
+  quantelix_data:
