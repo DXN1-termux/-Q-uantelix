@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo/quantelix-logo.svg" alt="[Q]uantelix" width="100%">
+  <img src="assets/logo/quantelix-logo.svg" alt="[Q]uantelix" width="520">
 </p>
 
 <p align="center">

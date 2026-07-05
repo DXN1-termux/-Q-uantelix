@@ -14,6 +14,27 @@ export { Deduplicator } from "./core/deduplicator";
 export { ImportanceClassifier } from "./core/importance-classifier";
 export { MemorySystem } from "./core/memory-system";
 
+// MoE
+export { MoERouter } from "./moe/router";
+export { ExpertRegistry } from "./moe/expert-registry";
+export { Coordinator } from "./moe/coordinator";
+export { SubAgent } from "./moe/sub-agent";
+export { MemoryBus } from "./moe/memory-bus";
+
+// Workflow
+export { WorkflowInterpreter } from "./workflow/interpreter";
+export { WorkflowScheduler } from "./workflow/scheduler";
+
+// Knowledge
+export { KnowledgeBase } from "./knowledge";
+
+// Sandbox
+export { ContainerManager } from "./sandbox/container-manager";
+
+// Enterprise
+export { AuditLogger } from "./enterprise/audit-logger";
+export { PolicyEngine } from "./enterprise/policy-engine";
+
 // Tools — Code
 export { readFileTool, writeFileTool, editFileTool, searchCodeTool, listDirectoryTool } from "./tools/code/file-tools";
 
@@ -56,20 +77,23 @@ export { AnthropicProvider } from "./providers/anthropic";
 export { ToolRegistry } from "./plugins/registry";
 export { MCPBridge } from "./plugins/mcp-bridge";
 
-// Types
+// Types — Core
 export type {
   AgentState, AgentEvent, ConversationMessage, ToolDefinition,
   ToolContext, ToolOutput, LLMProvider, AgentConfig,
 } from "./core/types";
 
-export type {
-  ScoredItem, ScoreWeights,
-} from "./core/score-calculator";
+export type { ScoredItem, ScoreWeights } from "./core/score-calculator";
+export type { MemoryRow, ContextChunkRow, SortWeightRow } from "./core/context-store";
+export type { MemoryCreateInput, MemoryGraph, MemoryGraphEdge } from "./core/memory-system";
 
+// Types — MoE
 export type {
-  MemoryRow, ContextChunkRow, SortWeightRow,
-} from "./core/context-store";
+  ExpertType, ExpertAgent, MoETask, MoERoute, SubAgentConfig, SubAgentResult, MemoryBusMessage,
+} from "./moe/types";
 
-export type {
-  MemoryCreateInput, MemoryGraph, MemoryGraphEdge,
-} from "./core/memory-system";
+// Types — Workflow
+export type { WorkflowDefinition, WorkflowNode, WorkflowEdge, WorkflowRun } from "./workflow/interpreter";
+
+// Types — Knowledge
+export type { KnowledgeSource, KnowledgeChunk, RetrievalResult } from "./knowledge";
